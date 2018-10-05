@@ -1,0 +1,1 @@
+objs-y := hal_flash.o

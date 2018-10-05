@@ -1,0 +1,32 @@
+PHONY := __build                                        #定义一个PHONY变量
+__build:                                                #开头说明__build伪目标，使其成为Makefile.build的第一个目标
+objs-y :=                                                #定义当前目录的目标变量，初始值为空
+subdir-y :=                                             #定义当前目录的子目录变量，初始值为空
+include Makefile                                        #将当前目录的Makefile包含进来，初始化obj-y
+                                                        #objs-y:=a.o b.o c/ d/
+__subdir-y := $(patsubst %/,%,$(filter %/, $(objs-y)))   #筛选出当前目录的目标变量中的子目录，并且去掉/
+                                                        #$(filter %/, $(objs-y)):c/ d/
+                                                        #__subdir-y:c d
+subdir-y += $(__subdir-y)                               #将开始定义的subdir-y赋值为__subdir-y
+                                                        #subdir-y:c d
+subdir_objs := $(foreach f,$(subdir-y),$(join $(f), /built-in.o)) #对于subdir-y里面的每一个值(目录),增加一个相应的目录/built-in.o的变量值
+                                                        #subdir_objs：c/built-in.o d/built-in.o
+cur_objs := $(filter-out %/, $(objs-y))                  #得到obj-y中的.o文件
+                                                        #cur_objs:a.o b.o
+dep_files := $(foreach f,$(cur_objs),.$(f).d)           #对于所有的.o文件，定义它的依赖文件名
+                                                        #dep_files: .a.d .b.d
+dep_files := $(wildcard $(dep_files))
+ifneq ($(dep_files),)                                   #根据依赖文件名，判断依赖文件是否存在，存在就包含就来
+    include $(dep_files)
+endif
+PHONY += $(subdir-y)                                    #将$(subdir-y)也加入到变量PHONY中
+#--------------------------------------------Makefile. build的第一个规则--------------------------------------------------------------
+__build : $(subdir-y) built-in.o                        #第一个规则
+$(subdir-y):                                            #第一个规则的第一个依赖规则
+	make -C $@ -f $(join $(TOPDIR),/Makefile.build)              #依次进入该子目录变量里面存储的值，使用的Makefile.build进行编译
+built-in.o : $(cur_objs) $(subdir_objs)                 #第一个规则的第二个依赖规则
+	$(LD) -r -o $@ $^                                   #该规则的命令:将该目录下的.o和$(subdir_obj)打包成built-in.o文件
+dep_file = .$@.d                                        #
+%.o : %.c                                               #第一个规则的第二个依赖规则的依赖规则 
+	$(CC) $(CFLAGS) -Wp,-MD,$(dep_file) -c -o $@ $<     #用于将目录下所有的.c文件编译成.o文件
+.PHONY : $(PHONY)                                       #将PHONY声明为伪目标
