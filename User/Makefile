@@ -1,1 +1,1 @@
-objs-y := src/
+objs-y += src/

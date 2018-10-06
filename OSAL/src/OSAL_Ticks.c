@@ -4,7 +4,7 @@
   * @author  chyq
   * @version V1.1.0
   * @date    10-9-2013
-  * @brief   Ïß³ÌÊ±ÖÓµÎ´ð.
+  * @brief   OSAL Ticks functions.
   ******************************************************************************
   * @attention
   *

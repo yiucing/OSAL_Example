@@ -1,4 +1,4 @@
-objs-y := OSAL.o
+objs-y += OSAL.o
 objs-y += OSAL_Clock.o
 objs-y += OSAL_Memory.o
 objs-y += OSAL_Nv.o

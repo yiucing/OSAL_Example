@@ -1,1 +1,1 @@
-objs-y := template/
+objs-y += template/
