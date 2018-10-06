@@ -4,7 +4,7 @@
   Revision:       $Revision: 40796 $
 
 
-  Description:    Zigbee Cluster Library - sample device application.
+  Description:    user task2.
 
 
   Copyright 2006-2014 Texas Instruments Incorporated. All rights reserved.
