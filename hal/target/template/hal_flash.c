@@ -150,7 +150,7 @@ void HalFlashWrite(uint16 addr, uint8 *buf, uint16 cnt)
   addr = addr * HAL_FLASH_WORD_SIZE -HAL_NV_START_ADDR;
   cnt = cnt * HAL_FLASH_WORD_SIZE;
   
-  if (addr + cnt >= HAL_FLASH_PAGE_SIZE * HAL_NV_PAGE_CNT) 
+  if (addr + cnt > HAL_FLASH_PAGE_SIZE * HAL_NV_PAGE_CNT) 
   	return;
 
   halIntState_t is;
